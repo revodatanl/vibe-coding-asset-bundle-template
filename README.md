@@ -52,6 +52,8 @@ your-project-name/
 
 We recommend indexing the Databricks [DLT documentation](https://docs.databricks.com/aws/en/dlt) in addition to the Cursor rules. You can do this by using the [`@docs`](https://docs.cursor.com/context/@-symbols/@-docs) command.
 
+Furthermore, Databricks Labs is actively developing a [MCP](https://github.com/databrickslabs/mcp?tab=readme-ov-file#unity-catalog-server). This can also be added to the Cursor.
+
 ## Contributing
 
 Contributions to improve this template are welcome. Please feel free to submit issues or pull requests.

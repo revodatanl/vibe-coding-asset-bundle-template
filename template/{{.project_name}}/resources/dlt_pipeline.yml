@@ -1,0 +1,14 @@
+# The main pipeline for testing_for_resources
+resources:
+  pipelines:
+    testing_for_resources_pipeline:
+      name: testing_for_resources_pipeline
+      ## Specify the 'catalog' field to configure this pipeline to make use of Unity Catalog:
+      catalog: ${bundle.default_catalog}
+      target: testing_for_resources_${bundle.target}  
+      libraries:
+        - notebook:
+            path: ../src/dlt_pipeline.ipynb
+
+      configuration:
+        bundle.sourcePath: ${workspace.file_path}/src

@@ -5,6 +5,12 @@
         "default": "basic_bundle",
         "description": "What is the name of the bundle you want to create?",
         "order": 1
+      },
+      "default_catalog": {
+        "type": "string",
+        "default": "basic_bundle",
+        "description": "What is the name of the catalog you want to create?",
+        "order": 2
       }
     },
     "success_message": "\nYour bundle '{{.project_name}}' has been created."
