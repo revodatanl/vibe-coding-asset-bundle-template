@@ -47,20 +47,20 @@ your-project-name/
 └── src/               # Source code directory
 ```
 
-### Additional IDE Configuration
+## Additional IDE Configuration
 
 We recommend indexing the following Databricks documentation:
 
 - [Databricks DLT Documentation](https://docs.databricks.com/aws/en/dlt)
 - [Asset Bundle Template Documentation](https://docs.databricks.com/aws/en/dev-tools/bundles/)
 
-## For Cursor
+### For Cursor
 
 Add these resources using the [`@docs`](https://docs.cursor.com/context/@-symbols/@-docs) command alongside the standard Cursor rules.
 
 Additionally, consider integrating the Databricks [Model Context Protocol (MCP)](https://github.com/databrickslabs/mcp?tab=readme-ov-file#unity-catalog-server) developed by Databricks Labs. Learn how to [add MCP to Cursor here](https://docs.cursor.com/context/model-context-protocol).
 
-## For Continue.dev
+### For Continue.dev
 
 Similarly, we recommend indexing additional documentation in Continue.dev:
 
