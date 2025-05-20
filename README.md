@@ -28,9 +28,9 @@ This repository serves as a template for creating new Databricks Asset Bundle pr
 
 2. Deploy and run the asset bundle to your workspace: 
 
-```BASH 
-    databricks bundle deploy --target dev
-```
+    ```BASH 
+        databricks bundle deploy --target dev
+    ```
 
 Alternatively you can also clone this repository to expand the template to fit your use-case.
 
