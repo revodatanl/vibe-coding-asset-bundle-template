@@ -4,7 +4,7 @@ In today's fast-paced data engineering landscape, AI coding assistants are drama
 
 However, tools like Cursor or Continue.dev often struggle to keep pace with Databricks' rapid release schedule, as the underlying models are trained a while ago, and thus not aware of the latest feature sets. This template bridges that gap by combining custom AI coding rules derived from current Databricks documentation with the power of Databricks Asset Bundles (DAB).
 
-Whether you're building new data pipelines, implementing advanced transformations, or orchestrating comprehensive workflows, this template provides the foundation to accomplish it all with increased speed and effectiveness. We support both [Cursor Rules](https://docs.cursor.com/context/rules) and [Conintue.dev rules](https://docs.continue.dev/customize/deep-dives/rules).
+Whether you're building new data pipelines, implementing advanced transformations, or orchestrating comprehensive workflows, this template provides the foundation to accomplish it all with increased speed and effectiveness as we support both [Cursor Rules](https://docs.cursor.com/context/rules) and [Conintue.dev rules](https://docs.continue.dev/customize/deep-dives/rules).
 
 ## Getting Started
 
