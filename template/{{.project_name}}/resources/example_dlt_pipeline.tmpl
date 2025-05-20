@@ -1,12 +1,12 @@
 resources:
   pipelines:
-    testing_dlt_pipeline:
-      name: testing_dlt_pipeline
+    example_dlt_pipeline:
+      name: example_dlt_pipeline
       catalog: {{.default_catalog}}
       target: testing_for_resources_${bundle.target}  
       libraries:
         - notebook:
-            path: ../src/dlt_pipeline.py
+            path: ../src/example_dlt_pipeline.py
 
       configuration:
         bundle.sourcePath: ${workspace.file_path}/src

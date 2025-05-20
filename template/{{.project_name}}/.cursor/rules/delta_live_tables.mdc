@@ -1,6 +1,6 @@
 ---
 description: Best practices and architectural guidance for developing, deploying, and managing Databricks DLT (Delta Live Tables) pipelines, including streaming tables, materialized views, CDC, data quality, pipeline configuration, and operational considerations.
-globs: "**/src/**/*.py",**/src/**/*.sql,**/src/**/*.ipynb
+globs: src/**/*.py,src/*.py,src/**/*.sql,src/*.sql,src/*.ipynb,src/**/*.ipynb
 alwaysApply: false
 ---
 # Databricks DLT (Delta Live Tables) Pipeline Rules

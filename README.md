@@ -50,7 +50,9 @@ your-project-name/
 
 ### Additional Cursor Configuration
 
-We recommend indexing the Databricks [DLT documentation](https://docs.databricks.com/aws/en/dlt) in addition to the Cursor rules. You can do this by using the [`@docs`](https://docs.cursor.com/context/@-symbols/@-docs) command.
+We recommend indexing the Databricks [DLT documentation](https://docs.databricks.com/aws/en/dlt) and the [Asset Bundle Template documentation]() in addition to the Cursor rules. You can do this by using the [`@docs`](https://docs.cursor.com/context/@-symbols/@-docs) command.
+
+
 
 Furthermore, Databricks Labs is actively developing a [MCP](https://github.com/databrickslabs/mcp?tab=readme-ov-file#unity-catalog-server). This can also be added to the Cursor.
 

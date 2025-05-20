@@ -75,7 +75,7 @@ def songs_raw():
 @dlt.expect("valid_duration", "duration > 0")
 def songs_prepared():
     return (
-        spark.read.table("songs_raw")
+        dlt.read.table("songs_raw")
         .withColumnRenamed("title", "song_title")
         .select(
             "artist_id",
@@ -98,7 +98,7 @@ def songs_prepared():
 )
 def top_artists_by_year():
     return (
-        spark.read.table("songs_prepared")
+        dlt.read.table("songs_prepared")
         .filter(expr("year > 0"))
         .groupBy("artist_name", "year")
         .count()
