@@ -1,0 +1,128 @@
+---
+description: Authoritative rules for creating, managing, and deploying Databricks Asset Bundles (DABs) for programmatic management of Databricks workflows, jobs, pipelines, and related resources. Covers configuration, best practices, security, CI/CD, and collaboration patterns.
+globs: **/databricks.yml,**/bundle*.yml,**/resources/*.yml
+alwaysApply: false
+---
+# Databricks Asset Bundles (DAB) Rules
+
+## 1. Bundle Structure and Configuration
+
+- Every bundle **must** have a `databricks.yml` at its root. Additional configuration files can be included via the `include` key.
+- Use modular configuration: separate resources, targets, and artifacts into their own files when possible for maintainability.
+- Use the `resources` key to define Databricks resources (jobs, pipelines, clusters, etc.) using the corresponding REST API payload structure in YAML.
+- Use the `targets` key to define deployment environments (e.g., dev, staging, prod). Each target can override resources, artifacts, variables, and workspace settings.
+- Only one target can have `default: true`.
+- Use the `variables` key to define reusable, parameterized values. Reference variables with `${var.<name>}`.
+- Use substitutions for dynamic values (e.g., `${bundle.name}`, `${workspace.current_user.userName}`).
+
+## 2. Resource Definition and Management
+
+- Define jobs, pipelines, clusters, and other resources under the `resources` key.
+- For jobs and pipelines, use the same YAML structure as the Databricks REST API (see [POST /api/2.1/jobs/create](mdc:https:/docs.databricks.com/api/workspace/jobs/create)).
+- Use `job_clusters` for reusable cluster definitions within jobs.
+- Use `tasks` to define job steps. Each task must have a unique `task_key`.
+- For pipelines, define clusters under `clusters` and libraries under `libraries`.
+- Use `depends_on` in tasks to specify execution order.
+- Use `job_cluster_key` or `existing_cluster_id` to assign clusters to tasks.
+
+## 3. Artifact Management
+
+- Use the `artifacts` key to define buildable artifacts (e.g., Python wheels, JARs).
+- For Python wheels, set `type: whl` and specify `build` and `path` as needed.
+- Artifacts can be overridden per target under `targets.<target>.artifacts`.
+- Use the `libraries` key in tasks to install wheel, JAR, PyPI, Maven, or requirements.txt dependencies.
+- For private artifacts, download them locally and reference them in the bundle. Optionally, upload to Unity Catalog volumes for secure sharing.
+
+## 4. Workspace and Deployment Paths
+
+- Use the `workspace` key to configure deployment paths (`host`, `root_path`, `artifact_path`, `file_path`).
+- Prefer using `host` over `profile` for portability.
+- For production, set `root_path` to a shared, non-user-specific location (e.g., `/Shared/.bundle/prod/${bundle.name}`).
+- Use substitutions to construct dynamic paths.
+
+## 5. Authentication and Security
+
+- For development, use OAuth U2M authentication and configuration profiles.
+- For CI/CD and production, use service principals (OAuth M2M) and environment variables for secrets.
+- Never hard-code secrets or tokens in bundle files.
+- Use the `run_as` key to specify the identity for workflow execution. For production, prefer service principals.
+- Set permissions at the top level or per resource using the `permissions` key. Avoid overlapping permissions between top-level and resource-level definitions.
+
+## 6. CI/CD and Collaboration
+
+- Store bundles in version control (e.g., Git). Use Git folders in Databricks for collaboration.
+- Use the `git` key to annotate bundle deployments with repository and branch info.
+- For air-gapped environments, use the Databricks CLI Docker image and mount the bundle directory.
+- Use the `bundle generate` and `bundle deployment bind` commands to migrate and synchronize existing workspace resources with bundle configuration.
+
+## 7. Development and Deployment Modes
+
+- Use `mode: development` for dev targets. This enables:
+  - Resource name prefixing (e.g., `[dev username]`)
+  - Paused schedules/triggers
+  - Concurrent job runs
+  - Disabled deployment lock for faster iteration
+- Use `mode: production` for prod targets. This enforces:
+  - Validation of DLT pipeline development flags
+  - Git branch checks (if specified)
+  - Service principal enforcement (recommended)
+  - No cluster override via CLI
+- Use `presets` to customize deployment behaviors (e.g., `name_prefix`, `tags`, `jobs_max_concurrent_runs`, `trigger_pause_status`).
+
+## 8. Python Support for Bundles
+
+- You can define jobs and pipelines in Python using the `databricks-bundles` package.
+- Enable Python support in `databricks.yml` under `experimental.python`.
+- Use a virtual environment (`venv_path`) and specify resource loader functions.
+- Use mutators to programmatically modify jobs during deployment (e.g., add email notifications).
+- Use the "View as code" feature in the UI to convert existing jobs to Python or YAML for inclusion in bundles.
+
+## 9. Error Handling, Validation, and Best Practices
+
+- Always run `databricks bundle validate` after changes to ensure configuration correctness.
+- Use the `bundle schema` command to generate JSON schema for IDE validation.
+- Use `databricks bundle deploy` to push changes to the workspace, and `databricks bundle run <job/pipeline>` to execute resources.
+- Use `databricks bundle destroy` to clean up deployed resources.
+- For resource overrides (e.g., clusters, tasks), settings in the target take precedence over top-level definitions.
+- For artifacts, settings in the target override top-level artifact settings.
+- For clusters and tasks, use matching keys (`job_cluster_key`, `task_key`, `label`) to join and override settings between top-level and target-level definitions.
+
+## 10. Security and Compliance
+
+- Do not store sensitive data (e.g., secrets, tokens) in bundle files.
+- Use secret scopes and Unity Catalog for secure data and artifact storage.
+- For production, enforce `run_as` with service principals and set explicit permissions.
+- Avoid using DBFS root for library storage in Databricks Runtime 15.1+; use workspace files or Unity Catalog volumes instead.
+
+## 11. Collaboration in the Workspace
+
+- Enable workspace files and serverless compute for full bundle functionality.
+- Use Git folders for collaborative bundle development.
+- Share bundles by sharing the parent Git folder.
+- Use the Databricks UI or CLI for rapid iteration, validation, and deployment.
+
+## 12. Custom Templates and Extensibility
+
+- Use `databricks bundle init <template>` to create bundles from default or custom templates.
+- Custom templates must include a `databricks_template_schema.json` and configuration templates using Go templating syntax.
+- Use template helpers (e.g., `{{user_name}}`, `{{workspace_host}}`) for dynamic configuration.
+
+## 13. Common Patterns and Examples
+
+- Use `notebook_task`, `spark_python_task`, `python_wheel_task`, `sql_task`, `pipeline_task`, `dbt_task`, `dashboard_task`, `condition_task`, `for_each_task`, and `run_job_task` as needed in job definitions.
+- Reference artifacts and libraries using relative paths or workspace/volume paths.
+- Use `depends_on` for task dependencies and `parameters` for job parameterization.
+- For DLT pipelines, set `serverless: true` and configure clusters and libraries as needed.
+
+---
+
+**References:**
+- [Databricks Asset Bundles Documentation](mdc:https:/docs.databricks.com/en/dev-tools/bundles)
+- [Bundle configuration reference](mdc:https:/docs.databricks.com/en/dev-tools/bundles/reference)
+- [Bundle resource examples](mdc:https:/docs.databricks.com/en/dev-tools/bundles/resource-examples)
+- [Bundle templates](mdc:https:/docs.databricks.com/en/dev-tools/bundles/templates)
+- [Bundle library dependencies](mdc:https:/docs.databricks.com/en/dev-tools/bundles/library-dependencies)
+- [Bundle authentication](mdc:https:/docs.databricks.com/en/dev-tools/bundles/authentication)
+- [Bundle run identity](mdc:https:/docs.databricks.com/en/dev-tools/bundles/run-as)
+- [Bundle permissions](mdc:https:/docs.databricks.com/en/dev-tools/bundles/permissions)
+- [Bundle variables and substitutions](mdc:https:/docs.databricks.com/en/dev-tools/bundles/variables)

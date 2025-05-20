@@ -1,15 +1,8 @@
 ---
-description: 
-globs: 
-alwaysApply: true
----
-```
----
 description: Best practices and architectural guidance for developing, deploying, and managing Databricks DLT (Delta Live Tables) pipelines, including streaming tables, materialized views, CDC, data quality, pipeline configuration, and operational considerations.
-globs: ["**/dlt/**/*.py", "**/dlt/**/*.sql", "**/dlt/**/*.ipynb", "**/dlt/**/pipeline*.json", "**/dlt/**/pipeline*.yml"]
-alwaysApply: true
+globs: "**/src/**/*.py",**/src/**/*.sql,**/src/**/*.ipynb
+alwaysApply: false
 ---
-
 # Databricks DLT (Delta Live Tables) Pipeline Rules
 
 This rule provides comprehensive guidance for building robust, maintainable, and production-ready DLT pipelines in Databricks, covering both Python and SQL interfaces. It addresses pipeline structure, data ingestion, transformation, data quality, CDC, deployment, monitoring, and operational best practices.
@@ -216,4 +209,3 @@ def clean_customers():
 ---
 
 **Follow these rules to ensure DLT pipelines are robust, maintainable, secure, and aligned with Databricks best practices.**
-```
