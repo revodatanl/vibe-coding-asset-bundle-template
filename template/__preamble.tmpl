@@ -1,0 +1,16 @@
+# Preamble
+
+This file only provides template directives; it is skipped for the actual output.
+
+{{skip "__preamble"}}
+
+{{if not (eq .coding_assistant "cursor")}}
+  {{skip "{{.project_name}}/.cursor"}}
+{{end}}
+
+{{if not (eq .coding_assistant "continue.dev")}}
+  {{skip "{{.project_name}}/.continuerules"}}
+{{end}}
+
+
+

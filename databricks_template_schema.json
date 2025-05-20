@@ -6,11 +6,22 @@
         "description": "What is the name of the bundle you want to create?",
         "order": 1
       },
-      "default_catalog": {
+      "coding_assistant": {
         "type": "string",
-        "description": "What is the name of the catalog you want to create?",
+        "enum": ["cursor", "continue.dev"],
+        "description": "Which coding assistant are you using?",
         "order": 2
-      }
+      },
+        "catalog": {
+          "type": "string",
+          "description": "In which catalog do you want deploy the example DLT pipeline?",
+          "order": 3
+        },
+        "schema": {
+          "type": "string",
+          "description": "In which schema do you want deploy the example DLT pipeline?",
+          "order": 4
+        }
     },
     "success_message": "\nYour bundle '{{.project_name}}' has been created."
   }
