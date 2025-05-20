@@ -4,7 +4,7 @@ resources:
     testing_for_resources_pipeline:
       name: testing_for_resources_pipeline
       ## Specify the 'catalog' field to configure this pipeline to make use of Unity Catalog:
-      catalog: ${var.default_catalog}
+      catalog: {{.default_catalog}}
       target: testing_for_resources_${bundle.target}  
       libraries:
         - notebook:
