@@ -23,7 +23,7 @@ This repository serves as a template for creating new Databricks Asset Bundle pr
 1. Initialize the asset bundle template: 
  
     ```BASH
-    databricks bundle init https://github.com/revodatanl/deepseek-r1-asset-bundle-template --profile <profile>
+    databricks bundle init https://github.com/revodatanl/cursor-asset-bundle-template.git --profile <profile>
     ```
 
 2. Deploy and run the asset bundle to your workspace: 
