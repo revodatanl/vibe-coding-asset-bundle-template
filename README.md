@@ -1,14 +1,6 @@
-# Revo Cursor Asset Bundle Template
+# Revo Vibe Code Asset Bundle Template
 
-A template repository for creating Databricks Asset Bundles (DAB) projects with Cursor IDE support. This template provides a basic foundation for developing, deploying, and managing Databricks assets using the Asset Bundle framework.
-
-## Overview
-
-This repository serves as a template for creating new Databricks Asset Bundle projects. It includes:
-
-- A templated project structure that follows Databricks Asset Bundle best practices
-- Configuration for seamless development in Cursor IDE
-- Basic deployment configuration for development environments
+A template repository for creating Databricks Asset Bundles (DAB) projects with Vibe Coding support. This template provides a basic foundation for developing, deploying, and managing Databricks assets using the Asset Bundle framework, enriched with either [Cursor Rules](https://docs.cursor.com/context/rules) or [Conintue.dev rules](https://docs.continue.dev/customize/deep-dives/rules).
 
 ## Getting Started
 
@@ -16,7 +8,7 @@ This repository serves as a template for creating new Databricks Asset Bundle pr
 
 - [Databricks CLI](https://docs.databricks.com/dev-tools/cli/index.html) installed
 - Access to a Databricks workspace
-- Cursor IDE
+- Cursor IDE or Continue.dev extension
 
 ### Creating a New Project
 
@@ -29,22 +21,23 @@ This repository serves as a template for creating new Databricks Asset Bundle pr
 2. Deploy and run the asset bundle to your workspace: 
 
     ```BASH 
-        databricks bundle deploy --target dev
+    databricks bundle deploy --target dev
     ```
 
 Alternatively, you can clone this repository to expand the template to fit your needs.
 
 ### Project Structure
 
-After initialization, your project will have the following structure:
+After initialization (for Cursor), your project will have the following structure:
 
 ```
-.cursor
-├── rules
-└──── delta_live_tables.mdc
 your-project-name/
+├── .cursor/
+│   └── rules/
+│       ├── databricks_asset_bundles_cursor_rules.mdc
+│       └── delta_live_tables.mdc
 ├── databricks.yml     # Main bundle configuration file
-├── resources/         # Directory for resource definitions (jobs, pipelines, etc.)
+├── resources/         # Directory for resource definitions 
 └── src/               # Source code directory
 ```
 
@@ -52,9 +45,7 @@ your-project-name/
 
 We recommend indexing the Databricks [DLT documentation](https://docs.databricks.com/aws/en/dlt) and the [Asset Bundle Template documentation]() in addition to the Cursor rules. You can do this by using the [`@docs`](https://docs.cursor.com/context/@-symbols/@-docs) command.
 
-
-
-Furthermore, Databricks Labs is actively developing a [MCP](https://github.com/databrickslabs/mcp?tab=readme-ov-file#unity-catalog-server). This can also be added to the Cursor.
+Furthermore, you can also add the Databricks [MCP](https://github.com/databrickslabs/mcp?tab=readme-ov-file#unity-catalog-server), which is being developed by Databricks Labs. See how to [add MCP to Cursor](https://docs.cursor.com/context/model-context-protocol).
 
 ## Contributing
 
