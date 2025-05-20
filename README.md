@@ -23,8 +23,7 @@ Whether you're building new DLT data pipelines, implementing advanced transforma
     databricks bundle init https://github.com/revodatanl/cursor-asset-bundle-template.git --profile <profile>
     ```
 
-Alternatively, you can clone this repository to expand the template to fit your needs.
-
+*Alternatively, you can clone this repository to expand the template to fit your needs.*
 
 2. Deploy the example DLT pipeline to your workspace: 
 
