@@ -20,8 +20,17 @@ This repository serves as a template for creating new Databricks Asset Bundle pr
 
 ### Creating a New Project
 
-1. Initialize the asset bundle template: `databricks bundle init https://github.com/revodatanl/deepseek-r1-asset-bundle-template --profile <profile>`
-2. Deploy and run the asset bundle to your workspace: `databricks bundle deploy --target dev`
+1. Initialize the asset bundle template: 
+ 
+    ```BASH
+    databricks bundle init https://github.com/revodatanl/deepseek-r1-asset-bundle-template --profile <profile>
+    ```
+
+2. Deploy and run the asset bundle to your workspace: 
+
+```BASH 
+    databricks bundle deploy --target dev
+```
 
 Alternatively you can also clone this repository to expand the template to fit your use-case.
 
