@@ -1,4 +1,4 @@
-# RevoData Vibe Code Asset Bundle Template for DLT
+# RevoData AI Assistant Asset Bundle Template for DLT
 
 In today's fast-paced data engineering landscape, AI coding assistants are dramatically accelerating development cycles. Collaborating with AI is no longer just a luxury—it's becoming essential for teams that need to deliver robust Databricks solutions at scale.
 
