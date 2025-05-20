@@ -1,0 +1,219 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+```
+---
+description: Best practices and architectural guidance for developing, deploying, and managing Databricks DLT (Delta Live Tables) pipelines, including streaming tables, materialized views, CDC, data quality, pipeline configuration, and operational considerations.
+globs: ["**/dlt/**/*.py", "**/dlt/**/*.sql", "**/dlt/**/*.ipynb", "**/dlt/**/pipeline*.json", "**/dlt/**/pipeline*.yml"]
+alwaysApply: true
+---
+
+# Databricks DLT (Delta Live Tables) Pipeline Rules
+
+This rule provides comprehensive guidance for building robust, maintainable, and production-ready DLT pipelines in Databricks, covering both Python and SQL interfaces. It addresses pipeline structure, data ingestion, transformation, data quality, CDC, deployment, monitoring, and operational best practices.
+
+---
+
+## 1. Pipeline Structure and Source Code Organization
+
+- **Use Unity Catalog** for all new pipelines. Prefer serverless pipelines unless specific compute customization is required.
+- **Organize pipeline code** using the multi-file editor or workspace files. Place source code in a dedicated root folder; avoid mixing exploratory notebooks with production pipeline code.
+- **Separate transformation logic** into modular files (e.g., `data_sources/`, `transformations/`, `utilities/`).
+- **Do not mix Python and SQL in the same file**. Each file should contain only one language.
+- **Parameterize environment-specific values** (e.g., data paths, schema names) using pipeline configuration parameters, accessed via `spark.conf.get()` in Python or `${param}` in SQL.
+
+---
+
+## 2. Dataset Types and When to Use Them
+
+- **Streaming Tables**: Use for ingesting and incrementally processing append-only or streaming data sources (e.g., Kafka, cloud files). Suitable for low-latency, high-throughput workloads.
+- **Materialized Views**: Use for batch or incremental transformations, aggregations, or when results need to be cached and shared. Materialized views are always correct and can be incrementally refreshed if source tables support it.
+- **Views**: Use for intermediate, non-persistent transformations or validation steps. Views are recomputed on each query and are not published outside the pipeline.
+- **Temporary Tables**: Use for intermediate results not intended for external consumption. Declare with the `TEMPORARY` keyword.
+
+---
+
+## 3. Data Ingestion Patterns
+
+- **Use Auto Loader** (`cloudFiles` in Python, `read_files` in SQL) for scalable, incremental ingestion from cloud object storage.
+- **For message buses** (Kafka, Kinesis, Event Hubs), use the appropriate Spark Structured Streaming connectors. Store sensitive credentials in Databricks secrets and retrieve them securely in code.
+- **For CDC (Change Data Capture)**, use the DLT `APPLY CHANGES` or `APPLY CHANGES FROM SNAPSHOT` APIs for robust, out-of-order event handling and SCD Type 1/2 support.
+- **Always define schemas explicitly** for streaming sources when possible. Use schema inference and evolution (`from_json` with `schemaLocationKey`) only when necessary, and provide schema hints to control data types.
+
+---
+
+## 4. Data Quality and Expectations
+
+- **Define expectations** on all critical datasets using DLT expectations (`@dlt.expect`, `@dlt.expect_or_drop`, `@dlt.expect_or_fail` in Python; `EXPECT` constraints in SQL).
+- **Group reusable expectations** in Python using `expect_all`, `expect_all_or_drop`, or `expect_all_or_fail` with a dictionary of rules.
+- **Store expectation definitions separately** (e.g., in a Delta table or Python module) for portability and maintainability.
+- **Use tags** to group and filter expectations for different data quality domains.
+- **Monitor data quality metrics** via the DLT UI or by querying the event log.
+- **Quarantine invalid records** using temporary tables and views when records should be tracked but not dropped or failed.
+
+---
+
+## 5. Change Data Capture (CDC) and SCD Patterns
+
+- **Use `APPLY CHANGES`** for ingesting CDC feeds (e.g., Debezium, Delta CDF) into streaming tables.
+    - Specify `keys`, `sequence_by`, `apply_as_deletes`, and `except_column_list`.
+    - Use `stored_as_scd_type=1` for SCD Type 1 (overwrite), `stored_as_scd_type=2` for SCD Type 2 (history).
+    - For SCD Type 2, use `track_history_except_column_list` or `track_history_column_list` to control which columns are tracked for history.
+- **Do not use `MERGE INTO` with `foreachBatch`** for CDC unless absolutely necessary; it is error-prone and does not handle out-of-order or duplicate events robustly.
+- **For snapshot-based CDC**, use `APPLY CHANGES FROM SNAPSHOT` with periodic or historical snapshots.
+
+---
+
+## 6. Transformation and Aggregation Patterns
+
+- **Use streaming tables for incremental aggregations** (e.g., count, sum, min, max) when the number of groups is limited.
+- **Use materialized views for complex aggregations** or when transformations require full recomputation or non-append-only sources.
+- **Combine streaming tables and materialized views** in a single pipeline for medallion architectures (bronze/silver/gold).
+- **For stateful operations** (windowed aggregations, stream-stream joins, deduplication), always define watermarks to bound state and avoid OOM errors.
+    - Use `.withWatermark("timestamp", "interval")` in Python or `WATERMARK` clause in SQL.
+- **For stream-static joins**, be aware that static tables are snapshotted at the start of the stream and do not reflect later changes unless a full refresh is triggered.
+
+---
+
+## 7. Pipeline Configuration and Compute
+
+- **Use serverless pipelines** with Unity Catalog for most workloads. Serverless manages compute, autoscaling, and vertical scaling automatically.
+- **For classic compute pipelines**, enable enhanced autoscaling and set appropriate min/max workers.
+- **Set the default catalog and schema** in pipeline configuration. Use fully qualified table names for cross-catalog/schema references.
+- **Parameterize pipeline settings** (e.g., data paths, trigger intervals) using the `configuration` object in the pipeline JSON or UI.
+- **For production pipelines**, use production mode for better error handling and retries; use development mode for interactive development and testing.
+- **Do not attempt to set cluster attributes that are managed by DLT** (e.g., Spark version, cluster name, auto-termination).
+
+---
+
+## 8. Dependency Management
+
+- **Install Python dependencies** using `%pip install` in a separate cell at the top of each pipeline notebook. Do not mix `%pip install` with other code in the same cell.
+- **All notebooks in a pipeline share the same library environment**; do not attempt to use different library versions in the same pipeline.
+- **Do not use JVM libraries or Scala/Java code** in DLT pipelines; only Python and SQL are supported.
+- **Minimize use of init scripts**; if required, automate testing to detect runtime upgrade issues.
+
+---
+
+## 9. Security and Access Control
+
+- **Use Unity Catalog for fine-grained access control**. Grant `SELECT` and `REFRESH` privileges on streaming tables and materialized views as needed.
+- **Pipeline updates run as the pipeline owner**. Use a service principal as the owner for production pipelines.
+- **Store sensitive credentials** (e.g., cloud storage keys, Event Hubs keys) in Databricks secrets and retrieve them securely in code.
+- **By default, only the pipeline owner and admins can view driver logs**. To allow others, set `spark.databricks.acl.needAdminPermissionToViewLogs=false` in pipeline configuration.
+
+---
+
+## 10. Operational Best Practices
+
+- **Monitor pipelines** using the DLT UI, event log, and query history. Use event hooks for custom monitoring and alerting.
+- **Configure email notifications** for pipeline success/failure events.
+- **Use the DLT event log** to audit lineage, data quality, autoscaling events, and errors.
+- **Use selective refresh** to update only specific tables during development or after failures.
+- **Avoid unnecessary full refreshes**; use incremental refresh whenever possible. Set `pipelines.reset.allowed=false` on tables that should not be fully refreshed.
+- **For GDPR or compliance deletes**, use DML statements and `REORG ... APPLY (PURGE)` followed by `VACUUM` to physically remove data from streaming tables/materialized views with deletion vectors enabled.
+
+---
+
+## 11. Development and Testing
+
+- **Develop pipeline code in notebooks, workspace files, or local IDEs**. Use the Databricks DLT Python stub for local development (syntax checking, autocomplete).
+- **Test pipelines with sample or anonymized data**. Create separate pipelines for dev/test/prod, parameterizing data sources as needed.
+- **Validate pipeline code** using the "Validate" update before running full updates.
+- **Use Databricks Asset Bundles** for source-controlled, portable pipeline configurations and automated deployment.
+- **Use the multi-file editor** for large or complex pipelines to organize code and facilitate collaboration.
+
+---
+
+## 12. Limitations and Known Issues
+
+- **DLT pipelines are limited to 100 concurrent updates per workspace**.
+- **Each DLT dataset can be defined only once**; only streaming tables with append flows can have multiple flows writing to them.
+- **Identity columns are not supported with `APPLY CHANGES` targets** and may be recomputed in materialized views.
+- **Materialized views and streaming tables created by DLT cannot be shared via Delta Sharing**.
+- **Time travel is only supported on streaming tables, not materialized views**.
+- **The `pivot()` function is not supported in DLT**.
+- **JVM libraries and custom Spark versions are not supported**.
+- **Materialized views and streaming tables are only accessible to Databricks clients/applications unless written to external Delta tables via DLT sinks**.
+
+---
+
+## 13. Example Patterns
+
+### Streaming Table Ingestion (Python)
+
+```python
+import dlt
+
+@dlt.table
+def customers_bronze():
+    return (
+        spark.readStream.format("cloudFiles")
+        .option("cloudFiles.format", "json")
+        .load("/Volumes/path/to/files")
+    )
+```
+
+### Materialized View with Expectations (SQL)
+
+```sql
+CREATE OR REFRESH MATERIALIZED VIEW customers_prepared
+(CONSTRAINT valid_id EXPECT (id IS NOT NULL) ON VIOLATION DROP ROW)
+AS SELECT * FROM customers_bronze;
+```
+
+### CDC with APPLY CHANGES (Python)
+
+```python
+import dlt
+from pyspark.sql.functions import col, expr
+
+@dlt.view
+def users():
+    return spark.readStream.table("cdc_data.users")
+
+dlt.create_streaming_table("target")
+dlt.apply_changes(
+    target="target",
+    source="users",
+    keys=["userId"],
+    sequence_by=col("sequenceNum"),
+    apply_as_deletes=expr("operation = 'DELETE'"),
+    except_column_list=["operation", "sequenceNum"],
+    stored_as_scd_type=2
+)
+```
+
+### Data Quality with Reusable Expectations (Python)
+
+```python
+rules = {
+    "valid_id": "id IS NOT NULL",
+    "valid_email": "email LIKE '%@%'"
+}
+
+@dlt.table
+@dlt.expect_all_or_drop(rules)
+def clean_customers():
+    return spark.read.table("raw_customers")
+```
+
+---
+
+## 14. References
+
+- @DLT Concepts
+- @DLT Python Reference
+- @DLT SQL Reference
+- @DLT CDC
+- @DLT Expectations
+- @DLT Properties
+- @DLT Event Log
+- @DLT Asset Bundles
+
+---
+
+**Follow these rules to ensure DLT pipelines are robust, maintainable, secure, and aligned with Databricks best practices.**
+```
