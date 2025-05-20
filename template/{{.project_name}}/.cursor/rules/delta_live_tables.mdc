@@ -190,21 +190,8 @@ rules = {
 @dlt.table
 @dlt.expect_all_or_drop(rules)
 def clean_customers():
-    return spark.read.table("raw_customers")
+    return dlt.read("raw_customers")
 ```
-
----
-
-## 14. References
-
-- @DLT Concepts
-- @DLT Python Reference
-- @DLT SQL Reference
-- @DLT CDC
-- @DLT Expectations
-- @DLT Properties
-- @DLT Event Log
-- @DLT Asset Bundles
 
 ---
 

@@ -78,6 +78,7 @@
 - Use the `bundle schema` command to generate JSON schema for IDE validation.
 - Use `databricks bundle deploy` to push changes to the workspace, and `databricks bundle run <job/pipeline>` to execute resources.
 - Use `databricks bundle destroy` to clean up deployed resources.
+- Always ask for a profile to add to the commands, `databricks bundle deploy --profile <insert profile name>`.
 - For resource overrides (e.g., clusters, tasks), settings in the target take precedence over top-level definitions.
 - For artifacts, settings in the target override top-level artifact settings.
 - For clusters and tasks, use matching keys (`job_cluster_key`, `task_key`, `label`) to join and override settings between top-level and target-level definitions.
