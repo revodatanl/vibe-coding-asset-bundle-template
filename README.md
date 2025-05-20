@@ -32,7 +32,7 @@ This repository serves as a template for creating new Databricks Asset Bundle pr
         databricks bundle deploy --target dev
     ```
 
-Alternatively you can also clone this repository to expand the template to fit your use-case.
+Alternatively, you can clone this repository to expand the template to fit your needs.
 
 ### Project Structure
 
@@ -50,8 +50,7 @@ your-project-name/
 
 ### Additional Cursor Configuration
 
-We recommend indexing the Databricks [DLT documentation](https://docs.databricks.com/aws/en/dlt) in cursor additional to the cursor rules. You can do this by using the  [`@docs`](https://docs.cursor.com/context/@-symbols/@-docs) command.
-
+We recommend indexing the Databricks [DLT documentation](https://docs.databricks.com/aws/en/dlt) in addition to the Cursor rules. You can do this by using the [`@docs`](https://docs.cursor.com/context/@-symbols/@-docs) command.
 
 ## Contributing
 
