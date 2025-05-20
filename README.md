@@ -39,28 +39,10 @@ your-project-name/
 └── src/               # Source code directory
 ```
 
-## Development Workflow
+### Additional Cursor Configuration
 
-1. Define your resources in the `resources/` directory using YAML files
-2. Write your code in the `src/` directory
-3. Test your deployment locally:
+We recommend indexing the Databricks [DLT documentation](https://docs.databricks.com/aws/en/dlt) in cursor additional to the cursor rules. You can do this by using the  [`@docs`](https://docs.cursor.com/context/@-symbols/@-docs) command.
 
-```bash
-databricks bundle deploy --target dev
-```
-
-4. Verify your resources in the Databricks workspace
-
-## Advanced Configuration
-
-The `databricks.yml` file supports various configuration options:
-
-- Different deployment targets (dev, staging, prod)
-- Workspace-specific settings
-- Resource inclusion patterns
-- And more
-
-Refer to the [Databricks Asset Bundle documentation](https://docs.databricks.com/dev-tools/bundles/index.html) for detailed configuration options.
 
 ## Contributing
 
