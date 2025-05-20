@@ -8,7 +8,6 @@
       },
       "default_catalog": {
         "type": "string",
-        "default": "basic_bundle",
         "description": "What is the name of the catalog you want to create?",
         "order": 2
       }
