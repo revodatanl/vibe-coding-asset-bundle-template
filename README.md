@@ -1,41 +1,32 @@
-# RevoData Vib Coding Asset Bundle Template for DLT
+# RevoData Vibe Coding Asset Bundle Template for DLT
 
-In today's fast-paced data engineering landscape, AI coding assistants are dramatically accelerating development cycles. Collaborating with AI is no longer just a luxury—it's becoming essential for teams that need to deliver robust Databricks solutions at scale.
+In today's fast-paced data engineering landscape, AI coding assistants are dramatically accelerating development cycles. Collaborating with AI is no longer just a luxury—it's becoming essential for teams that need to deliver robust solutions at scale. However, the vibes for Databricks are not yet there. This Databricks Asset Bundles (DAB) template is designed to help developers use the latest Databricks features with AI coding assistants.
 
-Tools like Cursor or Continue.dev often struggle to keep pace with Databricks' rapid release schedule, as the underlying models are trained months ago, and thus are not aware of the latest feature sets. This template bridges that gap by combining custom AI coding rules derived from latest Databricks documentation with the power of Databricks Asset Bundles (DAB).
-
-Whether you're building new DLT data pipelines, implementing advanced transformations, or orchestrating comprehensive workflows, this template provides the foundation to accomplish it all with increased speed and effectiveness, we support both [Cursor Rules](https://docs.cursor.com/context/rules) and [Conintue.dev](https://docs.continue.dev/customize/deep-dives/rules) rules.
+Tools like Cursor or Continue.dev often struggle to keep pace with Databricks' rapid release schedule, as the underlying models were trained months ago and thus are not aware of the latest feature sets. This template bridges that gap by combining custom AI coding rules derived from the latest Databricks documentation with the power of DAB. With the end goal of assisting you in building and deploying DLT pipelines with ease. We support both [Cursor Rules](https://docs.cursor.com/context/rules) and [Conintue.dev Rules](https://docs.continue.dev/customize/deep-dives/rules).
 
 ## Getting Started
 
 ### Prerequisites
 
-- [Databricks CLI](https://docs.databricks.com/dev-tools/cli/index.html) installed
+- [Databricks CLI](https://docs.databricks.com/dev-tools/cli/index.html)
 - Access to a Databricks workspace
 - Some experience with Databricks Asset Bundles
 - Cursor IDE or Continue.dev extension
 
 ### Creating a New Project
 
-1. Initialize the asset bundle template: 
- 
-    ```BASH
-    databricks bundle init https://github.com/revodatanl/cursor-asset-bundle-template.git --profile <profile>
-    ```
+Initialize the asset bundle template and deploy it to your workspace:
 
-*Alternatively, you can clone this repository to expand the template to fit your needs.*
-
-2. Deploy the example DLT pipeline to your workspace: 
-
-    ```BASH 
-    databricks bundle deploy --target dev
-    ```
+```bash
+databricks bundle init https://github.com/revodatanl/cursor-asset-bundle-template.git --profile <profile>
+databricks bundle deploy --target dev
+```
 
 ### Project Structure
 
 After initialization (for Cursor), your project will have the following structure:
 
-```TEXT
+```bash
 your-project-name/
 ├── .cursor/
 │   └── rules/
@@ -46,9 +37,9 @@ your-project-name/
 └── src/               # Source code directory
 ```
 
-## Additional IDE Configuration
+## Adding latest Databricks Documentation to model context
 
-We recommend indexing the following Databricks documentation:
+We recommend indexing the following Databricks documentation, this will provide additional context to the IDE:
 
 - [Databricks DLT Documentation](https://docs.databricks.com/aws/en/dlt)
 - [Asset Bundle Template Documentation](https://docs.databricks.com/aws/en/dev-tools/bundles/)

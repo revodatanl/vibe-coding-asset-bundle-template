@@ -1,0 +1,7 @@
+name: dlt_docs
+version: 0.0.1
+schema: v1
+docs:
+  - name: dlt docs
+    startUrl: https://docs.databricks.com/en/delta-live-tables/index.html
+    faviconUrl: https://docs.databricks.com/en/_static/favicon.ico
