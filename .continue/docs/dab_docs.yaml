@@ -1,0 +1,7 @@
+name: dab_docs
+version: 0.0.1
+schema: v1
+docs:
+  - name: dab docs
+    startUrl: https://docs.databricks.com/en/dev-tools/bundles/index.html
+    faviconUrl: https://docs.databricks.com/en/_static/favicon.ico
