@@ -12,5 +12,9 @@ This file only provides template directives; it is skipped for the actual output
   {{skip "{{.project_name}}/.continuerules"}}
 {{end}}
 
+{{if not (eq .coding_assistant "continue.dev")}}
+  {{skip "{{.project_name}}/.continue"}}
+{{end}}
+
 
 
