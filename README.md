@@ -31,31 +31,89 @@ your-project-name/
 ├── .cursor/
 │   └── rules/
 │       ├── databricks_asset_bundles.mdc
+│       ├── databricks_general.mdc
 │       └── delta_live_tables.mdc
+├── mcp/               # optional; only if you choose to use the MCP
+│   └── server.py
 ├── databricks.yml     # Main bundle configuration file
 ├── resources/         # Directory for resource definitions 
 └── src/               # Source code directory
 ```
 
-## Adding latest Databricks Documentation to model context
+## Adding Latest Databricks Documentation 
 
-We recommend indexing the following Databricks documentation, this will provide additional context to the IDE:
+We recommend indexing the following Databricks documentation, which will provide additional context to the IDE:
 
 - [Databricks DLT Documentation](https://docs.databricks.com/aws/en/dlt)
 - [Asset Bundle Template Documentation](https://docs.databricks.com/aws/en/dev-tools/bundles/)
 
-### For Cursor
+This works slightly differently for each tool:
 
-Add these resources using the [`@docs`](https://docs.cursor.com/context/@-symbols/@-docs) command alongside the standard Cursor rules.
+- Cursor: Add these resources using the [`@docs`](https://docs.cursor.com/context/@-symbols/@-docs) command.
+- Continue.dev: Follow [this guide](https://docs.continue.dev/customize/deep-dives/docs) to index the additional documentation.
 
-Additionally, consider integrating the Databricks [Model Context Protocol (MCP)](https://github.com/databrickslabs/mcp?tab=readme-ov-file#unity-catalog-server) developed by Databricks Labs. Learn how to [add MCP to Cursor here](https://docs.cursor.com/context/model-context-protocol).
+## Add the Model Context Protocol for Unity Catalog
 
-### For Continue.dev
+Ideally the 'agents' in Cursor or Continue.dev can access Unity Catalog to look up table names and definitions. This can be achieved by adding a simple MCP Server. When you initialize this bundle, you will be asked if you want to add it. In order to activate it, you need to take a the following of steps.
 
-Similarly, we recommend indexing additional documentation in Continue.dev:
+### 1: Install UV
 
-- Follow [this guide](https://docs.continue.dev/customize/deep-dives/docs) to index the additional documentation.
-- MCP is also supported in Continue.dev - implementation details can be found [here](https://docs.continue.dev/customize/deep-dives/mcp)
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+### 2:  Move to the `mcp` folder and install all requirements
+
+```bash
+cd mcp
+uv venv
+uv sync
+```
+
+### 3: Configure your environment variables
+
+For Cursor you need to adjust the `mcp.json`:
+
+```json
+{
+    "mcpServers": {
+        "revodata_databricks_mcp": {
+            "command": "/Users/<username>/.local/bin/uv",
+            "args": [
+                "run",
+                "--directory",
+                "/Users/<other_paths>/mcp",
+                "python",
+                "server.py"
+            ],
+            "env": {
+                "DATABRICKS_HOST": "{{workspace_host}}",
+                "DATABRICKS_TOKEN": "<personal_access_token>"
+            }
+        }
+    }
+}
+```
+
+For Continue.dev you need to adjust the `revodata_databricks_mcp.yml`:
+
+```yml
+name: revodata_databricks_mcp
+version: 0.0.1
+schema: v1
+mcpServers:
+  - name: revodata_databricks_mcp
+    command: /Users/<username>/.local/bin/uv # change <username> to your username
+    args:
+      - run
+      - --directory
+      - /Users/<other_paths>/mcp # in Cursor or VSCode simply copy the absolute path of the `mcp` folder
+      - python
+      - server.py
+    env:
+      DATABRICKS_HOST: {{workspace_host}}
+      DATABRICKS_TOKEN: <personal_access_token> # insert your personal access token
+```
 
 ## Contributing
 
