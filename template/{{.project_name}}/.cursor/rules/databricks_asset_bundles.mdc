@@ -1,6 +1,6 @@
 ---
 description: Authoritative rules for creating, managing, and deploying Databricks Asset Bundles (DABs) for programmatic management of Databricks workflows, jobs, pipelines, and related resources. Covers configuration, best practices, security, CI/CD, and collaboration patterns.
-globs: **/databricks.yml,databricks.yml,**/resources/*.yml,resources/*.yml,resources/**/*.yml
+globs: **/databricks.yml,databricks.yml,**/resources/*.yml,resources/*.yml,resources/**/*.yml,*.yml,*.yaml
 alwaysApply: false
 ---
 # Databricks Asset Bundles (DAB) Rules

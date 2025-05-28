@@ -1,0 +1,52 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Project Structure Guide
+
+This is a Databricks Asset Bundle (DAB) project with MCP.
+
+## Key Files and Directories
+
+### Core Configuration
+- @databricks.yml - Main Databricks Asset Bundle configuration file defining targets, workspace settings, and bundle metadata
+- @resources/ - Contains YAML resource definitions for Databricks assets (pipelines, jobs, etc.)
+- @src/ - Source code for notebooks, Python files, and pipeline logic
+
+### MCP Integration: never edit the mcp folder.
+
+### Development Environment
+- @.databricks/ - Databricks CLI configuration and authentication
+- @.vscode/ - VS Code workspace settings
+- @.cursor/rules/ - Cursor AI rules for development guidance
+
+## Project Architecture
+
+This project follows the Databricks Asset Bundle pattern:
+1. **Bundle Definition**: @databricks.yml defines the bundle name, targets, and includes resource files
+2. **Resource Configuration**: YAML files in @resources/ define pipelines, jobs, and other Databricks assets
+3. **Source Code**: Python notebooks and modules in @src/ contain the actual pipeline and job logic
+
+## Development Workflow
+
+1. Define resources in @resources/ YAML files
+2. Implement logic in @src/ Python files
+3. Use `databricks bundle validate` to deploy to development target
+4. Use MCP tools for Unity Catalog exploration and table schema discovery (might not always be available)
+5. Test pipelines and jobs in the Databricks workspace
+
+## Key Patterns
+
+- All Databricks assets are defined as code using YAML configuration
+- Python source files use Databricks notebook format with `# MAGIC` commands
+- Development mode automatically prefixes resources with developer username
+
+## Example / Guidance project structure:
+
+project-structure
+├── 📁 src/                              # Source code (all pipeline code)
+│   └── 📄 example_dlt_pipeline.py      # DLT pipeline implementation
+├── 📁 resources/                        # Databricks resource definitions
+│   └── 📄 example_dlt_pipeline.yml     # DLT pipeline configuration
+└── 📄 databricks.yml                   # Main Databricks Asset Bundle config
