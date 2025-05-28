@@ -21,7 +21,14 @@
           "type": "string",
           "description": "In which schema do you want deploy the example DLT pipeline?",
           "order": 4
-        }
+        },
+        "add_mcp_server": {
+          "type": "string",
+          "enum": ["yes", "no"],
+          "default": "yes",
+          "description": "Do you want to add the Unity Catalog MCP server (can be used to find tables and table columns)?",
+          "order": 5
+        } 
     },
     "success_message": "\nYour bundle '{{.project_name}}' has been created."
   }

@@ -1,0 +1,18 @@
+{
+    "mcpServers": {
+      "revodata_databricks_mcp": {
+        "command": "/Users/<username>/.local/bin/uv",
+        "args": [
+          "run",
+          "--directory",
+          "/Users/<other_paths>/mcp",
+          "python",
+          "server.py"
+        ],
+        "env": {
+          "DATABRICKS_HOST": "{{workspace_host}}",
+          "DATABRICKS_TOKEN": "<token>"
+        }
+      }
+    }
+  }

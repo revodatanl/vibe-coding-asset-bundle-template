@@ -1,0 +1,15 @@
+name: revodata_databricks_mcp
+version: 0.0.1
+schema: v1
+mcpServers:
+  - name: revodata_databricks_mcp
+    command: /Users/<username>/.local/bin/uv
+    args:
+      - run
+      - --directory
+      - /Users/<other_paths>/mcp,
+      - python
+      - server.py
+    env:
+      DATABRICKS_HOST: {{workspace_host}}
+      DATABRICKS_TOKEN: <personal_access_token>
