@@ -54,66 +54,66 @@ This works slightly differently for each tool:
 
 ## Add the Model Context Protocol for Unity Catalog
 
-Ideally the 'agents' in Cursor or Continue.dev can access Unity Catalog to look up table names and definitions. This can be achieved by adding a simple MCP Server. When you initialize this bundle, you will be asked if you want to add it. In order to activate it, you need to take a the following of steps.
+Ideally the 'agents' in Cursor and Continue.dev can access Unity Catalog to look up table names and definitions. This can be achieved by adding a simple MCP Server. When you initialize this bundle, you will be asked if you want to add it. In order to activate it, you need to take a the following of steps.
 
-### 1: Install UV
+1: Install UV
 
-```bash
-curl -LsSf https://astral.sh/uv/install.sh | sh
-```
+  ```bash
+  curl -LsSf https://astral.sh/uv/install.sh | sh
+  ```
 
-### 2:  Move to the `mcp` folder and install all requirements
+2:  Move to the `mcp` folder and install all requirements
 
-```bash
-cd mcp
-uv venv
-uv sync
-```
+  ```bash
+  cd mcp
+  uv venv
+  uv sync
+  ```
 
-### 3: Configure your environment variables
+3: Configure your environment variables
 
-For Cursor you need to adjust the `mcp.json`:
+  For Cursor you need to adjust the `mcp.json`:
 
-```json
-{
-    "mcpServers": {
-        "revodata_databricks_mcp": {
-            "command": "/Users/<username>/.local/bin/uv",
-            "args": [
-                "run",
-                "--directory",
-                "/Users/<other_paths>/mcp",
-                "python",
-                "server.py"
-            ],
-            "env": {
-                "DATABRICKS_HOST": "{{workspace_host}}",
-                "DATABRICKS_TOKEN": "<personal_access_token>"
-            }
-        }
-    }
-}
-```
+  ```json
+  {
+      "mcpServers": {
+          "revodata_databricks_mcp": {
+              "command": "/Users/<username>/.local/bin/uv",
+              "args": [
+                  "run",
+                  "--directory",
+                  "/Users/<other_paths>/mcp",
+                  "python",
+                  "server.py"
+              ],
+              "env": {
+                  "DATABRICKS_HOST": "{{workspace_host}}",
+                  "DATABRICKS_TOKEN": "<personal_access_token>"
+              }
+          }
+      }
+  }
+  ```
 
-For Continue.dev you need to adjust the `revodata_databricks_mcp.yml`:
+  For Continue.dev you need to adjust the `revodata_databricks_mcp.yml`:
 
-```yml
-name: revodata_databricks_mcp
-version: 0.0.1
-schema: v1
-mcpServers:
-  - name: revodata_databricks_mcp
-    command: /Users/<username>/.local/bin/uv # change <username> to your username
-    args:
-      - run
-      - --directory
-      - /Users/<other_paths>/mcp # in Cursor or VSCode simply copy the absolute path of the `mcp` folder
-      - python
-      - server.py
-    env:
-      DATABRICKS_HOST: {{workspace_host}}
-      DATABRICKS_TOKEN: <personal_access_token> # insert your personal access token
-```
+  ```yml
+  name: revodata_databricks_mcp
+  version: 0.0.1
+  schema: v1
+  mcpServers:
+    - name: revodata_databricks_mcp
+      command: /Users/<username>/.local/bin/uv # change <username> to your username
+      args:
+        - run
+        - --directory
+        - /Users/<other_paths>/mcp # in Cursor or VSCode simply copy the absolute path of the `mcp` folder
+        - python
+        - server.py
+      env:
+        DATABRICKS_HOST: {{workspace_host}}
+        DATABRICKS_TOKEN: <personal_access_token> # insert your personal access token
+  ```
 
 ## Contributing
 
